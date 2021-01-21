@@ -1,0 +1,47 @@
+from bs4 import BeautifulSoup
+import requests
+id = input("\n\nDigite el ID del usuario para mostrar la nube de palabras: \n    ") #Presentamos texto y almacenamos en variable id
+print("\n") #salto de linea
+id = id.strip () #Almacena la variable que en este caso es el ID de la persona ingresada
+if id.isdigit () != True:  #Validamos si el ID es digito si el usuario ingresa texto saldra error
+  print ("\n\nError 404 Not Found: Usuario no encontrado.") #Mensaje
+else: #Si es digito entonces lo buscaremos en la pagina stackoverflow en espaniol
+  url = 'https://es.stackoverflow.com/users/' + id + "/?tab=tags" #Link de stackoverflow unido el ID del usuario ingresado
+  page = requests.get (url)   # requests chequea que el url funciona
+  if page.status_code == 404:
+    print ("\n\nError",page.status_code,"Not Found: Usuario no encontrado.")
+  else:
+    print ("\n\nUsuario Encontrado: \n", url)
+    soup = BeautifulSoup (page.content, "html.parser") # BeautifulSoup analiza el htlm
+
+    for f in soup.find_all ('a', class_='m0 badge-tag js-rep-box-next-badge'):
+      join.append (f.text)
+
+    for a in soup.find_all ('a', class_='s-pagination--item js-pagination-item'):
+      npag.append (a.text)
+
+    if len (npag) == 0:
+
+      for c in soup.find_all ('a', class_='post-tag'):
+        lbls.append (c.text)
+      if int (len (join)) == 0 and len (lbls) != 0:
+        lbls.pop(0)
+      for d in soup.find_all ('div', class_='answer-votes'):
+        nmbrs.append (d.text)
+      cont=0
+      for g in nmbrs:
+        if int (len (nmbrs[cont])) > 1:
+            if nmbrs[cont][-1] == 'k':
+              nmbrs[cont] = nmbrs[cont][:-1]
+              nmbrs[cont] = nmbrs[cont]+'000'
+        cont=cont+1
+      counter=0
+      for e in nmbrs:
+        if int (e) > 0:
+          numbers.append (int (e))
+          labels.append (lbls[counter])
+        counter=counter+1
+      lbls.clear ()
+      nmbrs.clear ()
+    else:
+      print ("\n")
